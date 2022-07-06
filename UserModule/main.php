@@ -1,13 +1,14 @@
 <?php
 include('../Database/db.php'); 
 session_start();
-if (!isset($_SESSION["userid"]) ||(trim ($_SESSION["userid"]) == '')) { 
+if (!isset($_SESSION["userid"]) ||(trim ($_SESSION["userid"]) == '')) {
     header('location: ../index.php');
     exit();
 }else{
      $id = $_SESSION["userid"];
 }
 include('../UserModule/includes/fetch_acc_info.php');
+
 ?>
 
 <!DOCTYPE html>
@@ -22,6 +23,7 @@ include('../UserModule/includes/fetch_acc_info.php');
     <link rel="stylesheet" href="css/header.css">
     <link rel="stylesheet" href="css/main.css">
     <!-- Bootstrap CSS -->
+
     <link href="../bootstrap-5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <!-- Fontawesome -->
     <link href="../assets/fontawesome-free-6.0.0-web/css/fontawesome.css" rel="stylesheet">
@@ -33,13 +35,53 @@ include('../UserModule/includes/fetch_acc_info.php');
     <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
     <script src="js/main.js"></script>
 </head>
-
+<style type="text/css">
+.form-div { margin-top: 100px; border: 1px solid #e0e0e0; }
+#profileDisplay { display: block; height: 210px; width: 60%; margin: 0px auto; }
+.img-placeholder {
+  width: 60%;
+  color: white;
+  height: 100%;
+  background: black;
+  opacity: .7;
+  height: 210px;
+  z-index: 2;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: none;
+  margin: 0px auto;
+}
+.img-placeholder h4 {
+  margin-top: 40%;
+  color: white;
+}
+.img-div:hover .img-placeholder {
+  display: block;
+  cursor: pointer;
+}
+</style>
 <body>
 <div id="hero" class="container-fluid">
     <div class="row"><?php include 'header.php';?></div>
     <div id="hero-content" class="row flex-lg-row-reverse d-flex align-items-center justify-content-center">
         <div class="col-md-6">
-            <img id="read_image1" src="../assets/images/image-holder.svg" class="d-block mx-lg-auto img-fluid" width="242" height="363" >
+            <!--<img id="read_image1" src="../assets/images/image-holder.svg" class="d-block mx-lg-auto img-fluid" width="242" height="363" >--->
+        <form action="../UserModule/includes/upload_image.php" method="POST" enctype="multipart/form-data">
+          <h2 class="text-center mb-3 mt-3">UPLOAD PROFILE</h2>
+          <div class="form-group text-center" style="position: relative;" >
+            <span class="img-div">
+              <div class="text-center img-placeholder"  onClick="triggerClick()">
+                <h4>PICTURE</h4>
+              </div>
+              <img src="../assets/images/image-holder.svg" class="d-block mx-lg-auto img-fluid" width="242" height="363" onClick="triggerClick()" id="profileDisplay">
+            </span>
+            <input type="file" name="profileImage" onChange="displayImage(this)" id="profileImage" class="form-control" style="display: none;">
+          </div>
+          <div class="form-group">
+            <button type="submit" name="submit" class="btn btn-primary btn-block">Save Image</button>
+          </div>
+        </form>
         </div>
         <div class="col-md-6 py-5 mx-auto">
             <a class="main-edit-ico" data-bs-toggle="modal" data-bs-target="#modalHeroEdit"><i class="fa fa-edit"></i></a>
@@ -65,17 +107,18 @@ include('../UserModule/includes/fetch_acc_info.php');
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form class="row g-4 " id="formHeroEdit" name="formHeroEdit" method="POST" action="#">
+        <form class="row g-4 " id="formHeroEdit" name="formHeroEdit" method="POST" action="">
             <div class="col-12">
                 <label class="text-muted" for="update_description1">Introduction</label>
                 <textarea class="form-control" id="update_description1" name="update_description1" rows="7" maxlength="300" required
                 oninput="introLimit(this)" value=""></textarea>
-                <div id="charCounter" class="form-text text-end"></div>
+                <div id="charCounter" class="form-text text-end"></div> 
             </div>
             <div class="col-12">
-                <label class="text-muted" for="update_image1">Image Introduction Link</label>
-                <input class="form-control" id="update_image1" name="update_image1" type="text" placeholder="Insert image link" required
-                         value="">
+                <label class="text-muted" for="update_image1">Image Introduction</label><br>
+               <input class="form-control" id="update_image1" name="update_image1" type="text" placeholder="Insert image link" required
+               value="">
+
             </div>
             <!-- buttons -->
             <div class="col-md-6 d-flex justify-content-center">
@@ -704,6 +747,20 @@ include('../UserModule/includes/fetch_acc_info.php');
 <!-- /CONTACT US -->
 
 <script src="PortfolioCRUD\portfolio.ajax.js"></script>
+<script type="text/javascript">
+function triggerClick(e) {
+  document.querySelector('#profileImage').click();
+}
+function displayImage(e) {
+  if (e.files[0]) {
+    var reader = new FileReader();
+    reader.onload = function(e){
+      document.querySelector('#profileDisplay').setAttribute('src', e.target.result);
+    }
+    reader.readAsDataURL(e.files[0]);
+  }
+}
+</script>
 <?php include 'footer.php';?>
 
 

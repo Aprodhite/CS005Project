@@ -60,6 +60,18 @@ if(isset($_GET["error"])){
     else if($_GET["error"] == "IncOTP"){
         echo '<p>Invalid Verification code, please try again.</p>';
     }
+    else if($_GET["error"] == "ErrorDatabase"){
+        echo '<p>Database Error, please try again.</p>';
+    }
+    else if($_GET["error"] == "ErrorUploading"){
+        echo '<p>Error Uploading Image, please try again.</p>';
+    }
+    else if($_GET["error"] == "FileExists"){
+        echo '<p>File Already Exists, please try again.</p>';
+    }
+    else if($_GET["error"] == "SizeError"){
+        echo '<p>File is too big, please try again.</p>';
+    }
 
     echo '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
 }
@@ -85,6 +97,9 @@ if(isset($_GET["msg"])){
     }
      else if($_GET["msg"] == "CorrectOtp"){
         echo '<p>Valid Code, please create a new password</p>';
+    }
+    else if($_GET["msg"] == "UploadedImage"){
+        echo '<p>Successfully Uploaded</p>';
     }
     echo '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
 }
